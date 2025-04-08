@@ -9,7 +9,7 @@ const convertValues = async () => {
     const realToday = 0.18
 
 
-const data = await fetch("http://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL").then( response => response.json())
+const data = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL").then( response => response.json())
 const dolarToday = data.USDBRL.high
 const euroToday = data.EURBRL.high
 const bitcoinToday = Number(data.BTCBRL.high)
