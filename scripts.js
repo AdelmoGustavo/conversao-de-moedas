@@ -1,14 +1,19 @@
 const convertButton = document.querySelector(".convert-button")
 const currencySelectFrom = document.querySelector(".primeiro-select")
 const currencySelect = document.querySelector(".currency-select-value")
-function convertValues() {
-    const inputNumberValue = document.querySelector(".input-number").value
+const convertValues = async () => {
+    const inputNumberValue = Number(document.querySelector(".input-number").value)
     const currencyValueToConvert = document.querySelector(".currency-value-to-convert") // Valor em Real
     const currencyValueToConverted = document.querySelector(".currency-value") // Outras moedas
-    const dolarToday = 5.44
-    const euroToday = 6.08
     const libraToday = 7.30
     const realToday = 0.18
+
+
+const data = await fetch("http://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL").then( response => response.json())
+const dolarToday = data.USDBRL.high
+const euroToday = data.EURBRL.high
+const bitcoinToday = Number(data.BTCBRL.high)
+console.log(data)
 
     if (currencySelectFrom.value === currencySelect.value) {
         alert("A moeda de origem e a moeda de destino não podem ser a mesma.");
@@ -48,6 +53,13 @@ function convertValues() {
         }).format(inputNumberValue)
     }
 
+    if (currencySelectFrom.value == "bitcoin") { // Se for em bitcoin é aqui
+        currencyValueToConvert.innerHTML = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "BTC"
+        }).format(inputNumberValue)
+    }
+
     // Separando o código
 
     if (currencySelect.value == "real") { // Se for real é aqui
@@ -76,6 +88,10 @@ function convertValues() {
             style: "currency",
             currency: "GBP"
         }).format(inputNumberValue / libraToday)
+    }
+
+    if (currencySelect.value == "bitcoin") { // Se for em bitcoin é aqui
+     currencyValueToConverted.innerHTML = `₿ ${(inputNumberValue / bitcoinToday).toFixed(8)}`
     }
 }
 
@@ -114,6 +130,12 @@ function changeCurrency() {
         currencyValueToConverted.textContent = "R$ 0.00"
     }
 
+    if (currencySelect.value == "bitcoin") {
+        currencyName.innerHTML = "BitCoin"
+        currencyImage.src = "./assets/criptomoeda.png"
+        currencyValueToConverted.textContent = "BTC 0.00"
+    }
+
     convertValues()
 }
 
@@ -150,6 +172,12 @@ function changeCurrencyFrom() {
         currencyName.innerHTML = "Libra"
         currencyImage.src = "./assets/libra.png"
         currencyValueToConvert.textContent = "£ 0.00"
+    }
+
+    if (currencySelectFrom.value == "bitcoin") {
+        currencyName.innerHTML = "BitCoin"
+        currencyImage.src = "./assets/criptomoeda.png"
+        currencyValueToConvert.textContent = "BTC 0.00"
     }
 
     convertValues()
